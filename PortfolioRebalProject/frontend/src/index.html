@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Management Portal</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                    <h1>Portfolio Management Portal</h1>
+                </div>
+                <div class="header-stats" id="headerStats">
+                    <div class="stat-item">
+                        <span class="stat-label">Investors</span>
+                        <span class="stat-value" id="investorCount">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Portfolios</span>
+                        <span class="stat-value" id="portfolioCount">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Products</span>
+                        <span class="stat-value" id="productCount">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Master Models</span>
+                        <span class="stat-value" id="masterCount">-</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <div class="nav-section">
+                        <h3 class="nav-section-title">Data Tables</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-table="investor-data">
+                                    <i class="fas fa-users"></i>
+                                    <span>Investor Reference Data</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-table="portfolio-allocation">
+                                    <i class="fas fa-pie-chart"></i>
+                                    <span>Portfolio Current Allocation</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-table="product-market-data">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>Product Market Data</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-table="master-allocation-model">
+                                    <i class="fas fa-balance-scale"></i>
+                                    <span>Master Allocation Model</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-table="ai-rebalancing">
+                                    <i class="fas fa-robot"></i>
+                                    <span>AI Assisted Portfolio Rebalancing</span>
+                                    <span class="nav-badge">NEW</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content">
+                <div class="content-header">
+                    <h2 id="contentTitle">Welcome to Portfolio Management Portal</h2>
+                    <div class="content-actions">
+                        <button class="btn btn-secondary" id="refreshBtn">
+                            <i class="fas fa-refresh"></i>
+                            Refresh
+                        </button>
+                        <button class="btn btn-primary" id="exportBtn" style="display: none;">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-body">
+                    <!-- Welcome Screen -->
+                    <div id="welcomeScreen" class="welcome-screen">
+                        <div class="welcome-content">
+                            <i class="fas fa-chart-line welcome-icon"></i>
+                            <h3>Professional Portfolio Management System</h3>
+                            <p>Select a data table from the left navigation to view real-time portfolio data.</p>
+                            <div class="feature-grid">
+                                <div class="feature-card">
+                                    <i class="fas fa-users"></i>
+                                    <h4>Investor Data</h4>
+                                    <p>Comprehensive investor profiles and preferences</p>
+                                </div>
+                                <div class="feature-card">
+                                    <i class="fas fa-pie-chart"></i>
+                                    <h4>Portfolio Allocation</h4>
+                                    <p>Current asset allocation across all portfolios</p>
+                                </div>
+                                <div class="feature-card">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <h4>Market Data</h4>
+                                    <p>Real-time product pricing and market information</p>
+                                </div>
+                                <div class="feature-card">
+                                    <i class="fas fa-balance-scale"></i>
+                                    <h4>Master Allocation Model</h4>
+                                    <p>Strategic asset allocation models for different investor categories</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Table Container -->
+                    <div id="dataContainer" class="data-container" style="display: none;">
+                        <div class="table-controls">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchInput" placeholder="Search data...">
+                            </div>
+                            <div class="record-count">
+                                <span id="recordCount">0 records</span>
+                            </div>
+                        </div>
+                        
+                        <div class="table-wrapper">
+                            <table id="dataTable" class="data-table">
+                                <thead id="tableHeader">
+                                    <!-- Dynamic header will be inserted here -->
+                                </thead>
+                                <tbody id="tableBody">
+                                    <!-- Dynamic data will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="loading-spinner" id="loadingSpinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Loading data...</span>
+                        </div>
+                    </div>
+
+                    <!-- User Dashboard -->
+                    <div id="userDashboard" class="user-dashboard">
+                        <div class="dashboard-header">
+                            <div class="dashboard-nav">
+                                <button class="back-btn" id="backToTable">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Back to Table
+                                </button>
+                            </div>
+                            <div class="user-profile">
+                                <div class="profile-avatar" id="userAvatar">
+                                    <!-- User initials will be inserted here -->
+                                </div>
+                                <div class="profile-info">
+                                    <h1 id="userName">Loading...</h1>
+                                    <div class="profile-meta">
+                                        <span id="userCategory">Category</span>
+                                        <span id="userRisk">Risk Profile</span>
+                                        <span id="userLocation">Location</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-grid">
+                            <!-- Portfolio Value Card -->
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <div class="card-icon portfolio">
+                                        <i class="fas fa-wallet"></i>
+                                    </div>
+                                    <div>
+                                        <div class="card-title">Total Portfolio Value</div>
+                                        <div class="card-subtitle">Current investment amount</div>
+                                    </div>
+                                </div>
+                                <div class="portfolio-value">
+                                    <div class="value-amount" id="portfolioValue">$0</div>
+                                    <div class="value-change positive" id="valueChange">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>+2.5% this month</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Asset Allocation Chart -->
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <div class="card-icon allocation">
+                                        <i class="fas fa-pie-chart"></i>
+                                    </div>
+                                    <div>
+                                        <div class="card-title">Asset Allocation</div>
+                                        <div class="card-subtitle">Current portfolio breakdown</div>
+                                    </div>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="allocationChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Allocation vs Target -->
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <div class="card-icon performance">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
+                                    <div>
+                                        <div class="card-title">Current vs Target</div>
+                                        <div class="card-subtitle">Allocation comparison</div>
+                                    </div>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="comparisonChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Allocation Trend Chart -->
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <div class="card-icon allocation">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div>
+                                        <div class="card-title">Allocation Trends</div>
+                                        <div class="card-subtitle">Current vs target allocation trends</div>
+                                    </div>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="trendChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Risk Profile -->
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <div class="card-icon risk">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div>
+                                        <div class="card-title">Risk Profile</div>
+                                        <div class="card-subtitle">Investment risk assessment</div>
+                                    </div>
+                                </div>
+                                <div class="risk-grid">
+                                    <div class="risk-item">
+                                        <div class="risk-label">Risk Capacity</div>
+                                        <div class="risk-value" id="riskCapacity">-</div>
+                                        <div class="risk-indicator" id="riskIndicator">
+                                            <div class="fill"></div>
+                                        </div>
+                                    </div>
+                                    <div class="risk-item">
+                                        <div class="risk-label">Rebalancing Frequency</div>
+                                        <div class="risk-value" id="rebalanceFreq">-</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Allocation Breakdown -->
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <div class="card-icon portfolio">
+                                        <i class="fas fa-list"></i>
+                                    </div>
+                                    <div>
+                                        <div class="card-title">Allocation Breakdown</div>
+                                        <div class="card-subtitle">Detailed asset distribution</div>
+                                    </div>
+                                </div>
+                                <div class="allocation-list" id="allocationList">
+                                    <!-- Allocation items will be inserted here -->
+                                </div>
+                            </div>
+
+                            <!-- Recommendations -->
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <div class="card-icon performance">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                    <div>
+                                        <div class="card-title">Recommendations</div>
+                                        <div class="card-subtitle">Portfolio optimization suggestions</div>
+                                    </div>
+                                </div>
+                                <div class="recommendation-list" id="recommendationsList">
+                                    <!-- Recommendations will be inserted here -->
+                                </div>
+                            </div>
+
+                            <!-- Life Event Rebalancing Actions -->
+                            <div class="dashboard-card life-event-card">
+                                <div class="card-header">
+                                    <div class="card-icon behavioral">
+                                        <i class="fas fa-brain"></i>
+                                    </div>
+                                    <div>
+                                        <div class="card-title">AI Behavioral Finance Coach</div>
+                                        <div class="card-subtitle">Rebalance based on life events and behavioral insights</div>
+                                    </div>
+                                </div>
+                                <div class="life-event-actions">
+                                    <button class="btn btn-primary life-event-btn" id="lifeEventRebalance">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        Life Event Rebalancing
+                                    </button>
+                                    <button class="btn btn-secondary behavioral-coach-btn" id="behavioralCoach">
+                                        <i class="fas fa-user-md"></i>
+                                        Behavioral Assessment
+                                    </button>
+                                </div>
+                                <div class="life-event-preview">
+                                    <p><i class="fas fa-star"></i> Get personalized advice based on your life changes</p>
+                                    <p><i class="fas fa-shield-alt"></i> Prevent emotional investment mistakes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rebalancing Page -->
+                    <div id="rebalancingPage" class="rebalancing-page" style="display: none;">
+                        <div class="rebalancing-header">
+                            <div class="rebalancing-nav">
+                                <button class="back-btn" id="backToDashboard">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Back to Dashboard
+                                </button>
+                            </div>
+                            <div class="rebalancing-title">
+                                <h1 id="rebalancingTitle">Rebalance Portfolio</h1>
+                                <p id="rebalancingSubtitle">Optimize your <span id="assetClassType">equity</span> allocation for better returns</p>
+                            </div>
+                        </div>
+
+                        <!-- Current Holdings Section -->
+                        <div class="holdings-section">
+                            <div class="section-header">
+                                <h2>Current Holdings</h2>
+                                <p>Review your existing investments and their performance</p>
+                            </div>
+                            
+                            <div class="holdings-grid" id="holdingsGrid">
+                                <!-- Holdings cards will be inserted here -->
+                            </div>
+                        </div>
+
+                        <!-- AI Behavioral Finance Coach Section -->
+                        <div class="ai-coach-section" id="aiCoachSection">
+                            <div class="section-header">
+                                <h2><i class="fas fa-brain"></i> AI Behavioral Finance Coach</h2>
+                                <p>Get personalized rebalancing recommendations based on your life events and behavioral patterns</p>
+                            </div>
+                            
+                            <div class="coach-toggle">
+                                <button class="btn btn-primary coach-toggle-btn" id="enableAICoach">
+                                    <i class="fas fa-brain"></i>
+                                    Enable AI Life Event Analysis
+                                </button>
+                                <button class="btn btn-secondary coach-toggle-btn" id="useTraditionalRebalancing" style="display: none;">
+                                    <i class="fas fa-chart-line"></i>
+                                    Use Traditional Rebalancing
+                                </button>
+                            </div>
+                            
+                            <!-- AI Coach Form (initially hidden) -->
+                            <div class="ai-coach-form" id="aiCoachForm" style="display: none;">
+                                <div class="form-section">
+                                    <h3>Life Event Assessment</h3>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="rebalanceLifeEvent">Current Life Event</label>
+                                            <select id="rebalanceLifeEvent" class="form-control">
+                                                <option value="">Select a life event</option>
+                                                <option value="marriage">Marriage/Partnership</option>
+                                                <option value="new_baby">New Baby</option>
+                                                <option value="home_purchase">Home Purchase</option>
+                                                <option value="job_change">Job Change/Promotion</option>
+                                                <option value="job_loss">Job Loss</option>
+                                                <option value="inheritance">Inheritance</option>
+                                                <option value="retirement_planning">Retirement Planning</option>
+                                                <option value="health_expenses">Health Expenses</option>
+                                                <option value="debt_payoff">Debt Payoff</option>
+                                                <option value="education_planning">Education Planning</option>
+                                                <option value="divorce">Divorce/Separation</option>
+                                                <option value="other">Other Major Change</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="rebalanceEventTimeline">Timeline</label>
+                                            <select id="rebalanceEventTimeline" class="form-control">
+                                                <option value="">Select timeline</option>
+                                                <option value="happening_now">Happening Now</option>
+                                                <option value="next_6_months">Next 6 Months</option>
+                                                <option value="6_months_to_2_years">6 Months to 2 Years</option>
+                                                <option value="2_to_5_years">2 to 5 Years</option>
+                                                <option value="5_plus_years">5+ Years</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="rebalanceFinancialImpact">Financial Impact</label>
+                                            <select id="rebalanceFinancialImpact" class="form-control">
+                                                <option value="">Select impact</option>
+                                                <option value="major_increase">Major Income/Asset Increase</option>
+                                                <option value="moderate_increase">Moderate Increase</option>
+                                                <option value="no_change">No Significant Change</option>
+                                                <option value="moderate_decrease">Moderate Decrease</option>
+                                                <option value="major_decrease">Major Decrease/Expense</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="rebalanceCurrentEmotion">Current Investment Emotion</label>
+                                            <select id="rebalanceCurrentEmotion" class="form-control">
+                                                <option value="">How do you feel about investing?</option>
+                                                <option value="very_confident">Very Confident</option>
+                                                <option value="somewhat_confident">Somewhat Confident</option>
+                                                <option value="neutral">Neutral</option>
+                                                <option value="somewhat_anxious">Somewhat Anxious</option>
+                                                <option value="very_anxious">Very Anxious</option>
+                                                <option value="overwhelmed">Overwhelmed</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-actions">
+                                        <button class="btn btn-primary" id="getAIRecommendations">
+                                            <i class="fas fa-brain"></i>
+                                            Get AI Recommendations
+                                        </button>
+                                        <button class="btn btn-secondary" id="clearAIForm">
+                                            <i class="fas fa-refresh"></i>
+                                            Clear Form
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- AI Recommendations Display -->
+                            <div class="ai-recommendations" id="aiRecommendations" style="display: none;">
+                                <div class="recommendations-header">
+                                    <h3><i class="fas fa-lightbulb"></i> AI Analysis & Recommendations</h3>
+                                </div>
+                                <div class="recommendations-content" id="aiRecommendationsContent">
+                                    <!-- Dynamic AI recommendations will be inserted here -->
+                                </div>
+                                <div class="ai-action-buttons">
+                                    <button class="btn btn-secondary" id="modifyAIInputs">
+                                        <i class="fas fa-edit"></i>
+                                        Modify Inputs
+                                    </button>
+                                    <button class="btn btn-primary" id="proceedWithAI">
+                                        <i class="fas fa-forward"></i>
+                                        Proceed with AI Strategy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Scenarios Section -->
+                        <div class="scenarios-section" id="scenariosSection" style="display: none;">
+                            <div class="section-header">
+                                <h2>AI-Recommended Rebalancing Strategies</h2>
+                                <p>Choose from our AI-powered rebalancing scenarios or create your own custom selection</p>
+                            </div>
+                            
+                            <!-- Strategy Toggle -->
+                            <div class="strategy-toggle">
+                                <button class="toggle-btn active" id="aiScenariosBtn" onclick="window.portfolioApp.showAIScenarios()">
+                                    <i class="fas fa-robot"></i>
+                                    AI Scenarios
+                                </button>
+                                <button class="toggle-btn" id="customOptionsBtn" onclick="window.portfolioApp.showCustomOptions()">
+                                    <i class="fas fa-sliders-h"></i>
+                                    Custom Selection
+                                </button>
+                            </div>
+
+                            <!-- AI Scenarios Grid -->
+                            <div class="scenarios-grid" id="scenariosGrid">
+                                <!-- Scenario cards will be inserted here -->
+                            </div>
+
+                            <!-- Custom Rebalancing Options -->
+                            <div class="custom-rebalancing" id="customRebalancing" style="display: none;">
+                                <div class="custom-header">
+                                    <h3>Select Your Buy & Sell Options</h3>
+                                    <p>Choose which stocks to sell and which to buy for your personalized rebalancing strategy</p>
+                                </div>
+                                
+                                <div class="custom-options-container">
+                                    <div class="custom-sell-section">
+                                        <div class="custom-section-header">
+                                            <h4><i class="fas fa-arrow-down"></i> Stocks to Sell</h4>
+                                            <span class="selection-counter" id="sellCounter">0 selected</span>
+                                        </div>
+                                        <div class="custom-options-list" id="customSellOptions">
+                                            <!-- Sell options will be loaded here -->
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="custom-buy-section">
+                                        <div class="custom-section-header">
+                                            <h4><i class="fas fa-arrow-up"></i> Stocks to Buy</h4>
+                                            <span class="selection-counter" id="buyCounter">0 selected</span>
+                                        </div>
+                                        <div class="custom-options-list" id="customBuyOptions">
+                                            <!-- Buy options will be loaded here -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="custom-summary" id="customSummary" style="display: none;">
+                                    <div class="summary-content">
+                                        <h4>Rebalancing Summary</h4>
+                                        <div class="summary-details">
+                                            <div class="summary-item">
+                                                <span>Total Sells:</span>
+                                                <span id="totalSellAmount">$0</span>
+                                            </div>
+                                            <div class="summary-item">
+                                                <span>Total Buys:</span>
+                                                <span id="totalBuyAmount">$0</span>
+                                            </div>
+                                            <div class="summary-item">
+                                                <span>Net Change:</span>
+                                                <span id="netChange">$0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="scenario-actions">
+                                <button class="btn btn-secondary" id="cancelRebalance">
+                                    <i class="fas fa-times"></i>
+                                    Cancel
+                                </button>
+                                <button class="btn btn-primary" id="executeRebalance" style="display: none;">
+                                    <i class="fas fa-check"></i>
+                                    Execute Rebalancing
+                                </button>
+                                <button class="btn btn-primary" id="executeCustomRebalance" style="display: none;">
+                                    <i class="fas fa-magic"></i>
+                                    Execute Custom Rebalancing
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div class="rebalancing-loading" id="rebalancingLoading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Analyzing your portfolio...</span>
+                        </div>
+
+                        <!-- Success State -->
+                        <div class="rebalancing-success" id="rebalancingSuccess" style="display: none;">
+                            <div class="success-content">
+                                <i class="fas fa-check-circle"></i>
+                                <h3>Rebalancing Completed Successfully!</h3>
+                                <p>Your portfolio has been optimized according to your selected strategy.</p>
+                                <button class="btn btn-primary" id="viewUpdatedPortfolio">
+                                    <i class="fas fa-chart-line"></i>
+                                    View Updated Portfolio
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Behavioral Finance Coach Page -->
+                    <div id="behavioralCoachPage" class="behavioral-coach-page" style="display: none;">
+                        <div class="coach-header">
+                            <div class="coach-nav">
+                                <button class="back-btn" id="backToDashboardFromCoach">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Back to Dashboard
+                                </button>
+                            </div>
+                            <div class="coach-title">
+                                <h1>AI Behavioral Finance Coach</h1>
+                                <p>Get personalized rebalancing recommendations based on your life events and behavioral patterns</p>
+                            </div>
+                        </div>
+
+                        <!-- Life Event Input Section -->
+                        <div class="life-event-section">
+                            <div class="section-header">
+                                <h2><i class="fas fa-calendar-check"></i> Life Event Analysis</h2>
+                                <p>Tell us about recent or upcoming changes in your life to get tailored portfolio advice</p>
+                            </div>
+                            
+                            <div class="life-event-form">
+                                <div class="form-grid">
+                                    <!-- Primary Life Event -->
+                                    <div class="form-group full-width">
+                                        <label for="primaryLifeEvent">What's the main life event affecting your finances?</label>
+                                        <select id="primaryLifeEvent" class="form-select">
+                                            <option value="">Select a life event...</option>
+                                            <option value="marriage">Getting Married</option>
+                                            <option value="divorce">Divorce/Separation</option>
+                                            <option value="new_baby">New Baby/Child</option>
+                                            <option value="home_purchase">Buying a Home</option>
+                                            <option value="home_sale">Selling a Home</option>
+                                            <option value="job_change">Job Change/Promotion</option>
+                                            <option value="job_loss">Job Loss</option>
+                                            <option value="inheritance">Inheritance Received</option>
+                                            <option value="education">Education/Tuition Planning</option>
+                                            <option value="retirement_planning">Retirement Planning</option>
+                                            <option value="health_expenses">Major Health Expenses</option>
+                                            <option value="business_start">Starting a Business</option>
+                                            <option value="debt_payoff">Paying Off Major Debt</option>
+                                            <option value="relocation">Relocation/Moving</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Event Timeline -->
+                                    <div class="form-group">
+                                        <label for="eventTimeline">When is this happening?</label>
+                                        <select id="eventTimeline" class="form-select">
+                                            <option value="">Select timeline...</option>
+                                            <option value="happened_recently">Already happened (last 3 months)</option>
+                                            <option value="happening_now">Happening now</option>
+                                            <option value="next_6_months">Next 6 months</option>
+                                            <option value="next_year">Next 12 months</option>
+                                            <option value="1_2_years">1-2 years</option>
+                                            <option value="2_5_years">2-5 years</option>
+                                            <option value="5_plus_years">5+ years</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Financial Impact -->
+                                    <div class="form-group">
+                                        <label for="financialImpact">Expected financial impact?</label>
+                                        <select id="financialImpact" class="form-select">
+                                            <option value="">Select impact...</option>
+                                            <option value="major_expense">Major expense (>50% portfolio)</option>
+                                            <option value="moderate_expense">Moderate expense (20-50% portfolio)</option>
+                                            <option value="small_expense">Small expense (<20% portfolio)</option>
+                                            <option value="income_increase">Increased income/savings</option>
+                                            <option value="income_decrease">Decreased income</option>
+                                            <option value="no_change">No significant change</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Risk Tolerance Change -->
+                                    <div class="form-group">
+                                        <label for="riskChange">How has your risk tolerance changed?</label>
+                                        <select id="riskChange" class="form-select">
+                                            <option value="">Select change...</option>
+                                            <option value="much_more_conservative">Much more conservative</option>
+                                            <option value="more_conservative">More conservative</option>
+                                            <option value="no_change">No change</option>
+                                            <option value="more_aggressive">More aggressive</option>
+                                            <option value="much_more_aggressive">Much more aggressive</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Additional Details -->
+                                    <div class="form-group full-width">
+                                        <label for="eventDetails">Additional details about your situation:</label>
+                                        <textarea id="eventDetails" class="form-textarea" rows="3" 
+                                                placeholder="Describe any specific concerns, goals, or constraints related to this life event..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Behavioral Assessment Section -->
+                        <div class="behavioral-section">
+                            <div class="section-header">
+                                <h2><i class="fas fa-brain"></i> Behavioral Assessment</h2>
+                                <p>Help us understand your investment psychology to provide better guidance</p>
+                            </div>
+                            
+                            <div class="behavioral-form">
+                                <div class="form-grid">
+                                    <!-- Investment Emotion -->
+                                    <div class="form-group">
+                                        <label for="currentEmotion">How do you feel about investing right now?</label>
+                                        <select id="currentEmotion" class="form-select">
+                                            <option value="">Select feeling...</option>
+                                            <option value="very_confident">Very confident</option>
+                                            <option value="confident">Confident</option>
+                                            <option value="neutral">Neutral</option>
+                                            <option value="anxious">Anxious</option>
+                                            <option value="very_anxious">Very anxious</option>
+                                            <option value="overwhelmed">Overwhelmed</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Market Outlook -->
+                                    <div class="form-group">
+                                        <label for="marketOutlook">Your current market outlook:</label>
+                                        <select id="marketOutlook" class="form-select">
+                                            <option value="">Select outlook...</option>
+                                            <option value="very_optimistic">Very optimistic</option>
+                                            <option value="optimistic">Optimistic</option>
+                                            <option value="neutral">Neutral</option>
+                                            <option value="pessimistic">Pessimistic</option>
+                                            <option value="very_pessimistic">Very pessimistic</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Decision Making Style -->
+                                    <div class="form-group">
+                                        <label for="decisionStyle">Your investment decision style:</label>
+                                        <select id="decisionStyle" class="form-select">
+                                            <option value="">Select style...</option>
+                                            <option value="analytical">Analytical - I research thoroughly</option>
+                                            <option value="intuitive">Intuitive - I go with gut feeling</option>
+                                            <option value="delegating">Delegating - I prefer expert advice</option>
+                                            <option value="social">Social - I follow others' decisions</option>
+                                            <option value="conservative">Conservative - I avoid risks</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Recent Behavior -->
+                                    <div class="form-group">
+                                        <label for="recentBehavior">Recent investment behavior:</label>
+                                        <select id="recentBehavior" class="form-select">
+                                            <option value="">Select behavior...</option>
+                                            <option value="no_changes">No changes to portfolio</option>
+                                            <option value="increased_monitoring">Checking portfolio more often</option>
+                                            <option value="small_adjustments">Made small adjustments</option>
+                                            <option value="major_changes">Made major changes</option>
+                                            <option value="panic_selling">Sold investments due to fear</option>
+                                            <option value="fomo_buying">Bought due to market gains</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="coach-actions">
+                            <button class="btn btn-secondary" id="resetCoachForm">
+                                <i class="fas fa-refresh"></i>
+                                Reset Form
+                            </button>
+                            <button class="btn btn-primary" id="analyzeAndRebalance">
+                                <i class="fas fa-magic"></i>
+                                Analyze & Get Recommendations
+                            </button>
+                        </div>
+
+                        <!-- Results Section -->
+                        <div class="coach-results" id="coachResults" style="display: none;">
+                            <div class="section-header">
+                                <h2><i class="fas fa-chart-line"></i> Your Personalized Recommendations</h2>
+                                <p>Based on your life event and behavioral assessment</p>
+                            </div>
+                            
+                            <!-- AI Analysis -->
+                            <div class="analysis-cards">
+                                <div class="analysis-card behavioral-insights">
+                                    <div class="card-header">
+                                        <i class="fas fa-brain"></i>
+                                        <h3>Behavioral Insights</h3>
+                                    </div>
+                                    <div class="card-content" id="behavioralInsights">
+                                        <!-- Dynamic content will be inserted here -->
+                                    </div>
+                                </div>
+
+                                <div class="analysis-card life-event-impact">
+                                    <div class="card-header">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <h3>Life Event Impact</h3>
+                                    </div>
+                                    <div class="card-content" id="lifeEventImpact">
+                                        <!-- Dynamic content will be inserted here -->
+                                    </div>
+                                </div>
+
+                                <div class="analysis-card portfolio-recommendations">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-pie"></i>
+                                        <h3>Portfolio Recommendations</h3>
+                                    </div>
+                                    <div class="card-content" id="portfolioRecommendations">
+                                        <!-- Dynamic content will be inserted here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Rebalancing Options -->
+                            <div class="rebalancing-options" id="rebalancingOptions">
+                                <!-- Dynamic rebalancing scenarios will be inserted here -->
+                            </div>
+
+                            <!-- Execute Actions -->
+                            <div class="execute-actions">
+                                <button class="btn btn-secondary" id="saveRecommendations">
+                                    <i class="fas fa-save"></i>
+                                    Save Recommendations
+                                </button>
+                                <button class="btn btn-primary" id="implementRebalancing">
+                                    <i class="fas fa-play"></i>
+                                    Implement Rebalancing
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div class="coach-loading" id="coachLoading" style="display: none;">
+                            <i class="fas fa-brain fa-spin"></i>
+                            <span>AI is analyzing your profile and life events...</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/components/app.js"></script>
+</body>
+</html> 

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Portfolio Assistant - Portfolio Management Portal</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/ai-assistant.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <h1>AI Portfolio Assistant</h1>
+                </div>
+                <div class="header-nav">
+                    <a href="/" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Back to Portfolio
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="ai-container">
+            <!-- AI Sidebar -->
+            <aside class="ai-sidebar">
+                <div class="ai-agents-list">
+                    <h3>AI Agents</h3>
+                    
+                    <div class="agent-item active" data-agent="chat">
+                        <div class="agent-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="agent-info">
+                            <h4>Portfolio Assistant</h4>
+                            <p>Chat about your investments</p>
+                        </div>
+                    </div>
+                    
+                    <div class="agent-item" data-agent="analysis">
+                        <div class="agent-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="agent-info">
+                            <h4>Portfolio Analysis</h4>
+                            <p>Comprehensive analysis</p>
+                        </div>
+                    </div>
+                    
+                    <div class="agent-item" data-agent="risk">
+                        <div class="agent-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="agent-info">
+                            <h4>Risk Management</h4>
+                            <p>Risk alerts & protection</p>
+                        </div>
+                    </div>
+                    
+                    <div class="agent-item" data-agent="market">
+                        <div class="agent-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="agent-info">
+                            <h4>Market Intelligence</h4>
+                            <p>Market insights & trends</p>
+                        </div>
+                    </div>
+                    
+                    <div class="agent-item" data-agent="goals">
+                        <div class="agent-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="agent-info">
+                            <h4>Goal Planning</h4>
+                            <p>Financial goal tracking</p>
+                        </div>
+                    </div>
+                    
+                    <div class="agent-item" data-agent="monitoring">
+                        <div class="agent-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="agent-info">
+                            <h4>Auto Monitoring</h4>
+                            <p>24/7 portfolio watch</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="agent-status">
+                    <h4>System Status</h4>
+                    <div class="status-items" id="agentStatus">
+                        <div class="status-item">
+                            <span class="status-dot active"></span>
+                            <span>All agents active</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main AI Content -->
+            <main class="ai-main">
+                <!-- Chat Interface -->
+                <div class="ai-panel active" id="chatPanel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-comments"></i> Portfolio Chat Assistant</h2>
+                        <p>Ask me anything about your portfolio, investments, or market insights</p>
+                    </div>
+                    
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message assistant">
+                                <div class="message-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="message-content">
+                                    <div class="message-text">
+                                        Hello! I'm your AI Portfolio Assistant. I can help you with:
+                                        <br><br>
+                                        • Portfolio analysis and recommendations<br>
+                                        • Risk assessment and management<br>
+                                        • Market insights and trends<br>
+                                        • Financial planning and goals<br>
+                                        • Rebalancing strategies<br>
+                                        <br>
+                                        What would you like to know about your portfolio?
+                                    </div>
+                                    <div class="message-time">Now</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-suggestions" id="quickSuggestions">
+                            <button class="suggestion-btn" onclick="aiAssistant.sendQuickMessage('How is my portfolio performing?')">
+                                How is my portfolio performing?
+                            </button>
+                            <button class="suggestion-btn" onclick="aiAssistant.sendQuickMessage('Should I rebalance now?')">
+                                Should I rebalance now?
+                            </button>
+                            <button class="suggestion-btn" onclick="aiAssistant.sendQuickMessage('What are my biggest risks?')">
+                                What are my biggest risks?
+                            </button>
+                            <button class="suggestion-btn" onclick="aiAssistant.sendQuickMessage('Show me market trends')">
+                                Show me market trends
+                            </button>
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <div class="chat-input">
+                                <input type="text" id="chatInput" placeholder="Ask me about your portfolio..." onkeypress="aiAssistant.handleKeyPress(event)">
+                                <button id="sendButton" onclick="aiAssistant.sendMessage()">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio Analysis Panel -->
+                <div class="ai-panel" id="analysisPanel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-chart-line"></i> Portfolio Analysis</h2>
+                        <p>AI-driven personalized analysis for 10 customers</p>
+                    </div>
+                    
+                    <!-- Customer Selection -->
+                    <div class="customer-selection">
+                        <h3>📊 Select Customer for Personalized Analysis</h3>
+                        <div id="customerGrid" class="customer-grid">
+                            <div class="customer-loading">Loading customers...</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Selected Customer Analysis -->
+                    <div id="selectedCustomerAnalysis" class="selected-customer-analysis" style="display: none;">
+                        <div class="customer-header">
+                            <h3 id="selectedCustomerName">Customer Analysis</h3>
+                            <div id="customerProfile" class="customer-profile"></div>
+                        </div>
+                        
+                        <div id="personalizedScenarios" class="personalized-scenarios">
+                            <h4>🤖 Personalized AI Rebalancing Scenarios</h4>
+                            <div id="scenarioCards" class="scenario-cards"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-content">
+                        <div class="analysis-grid" id="analysisGrid">
+                            <div class="analysis-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Loading general scenarios...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk Management Panel -->
+                <div class="ai-panel" id="riskPanel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-shield-alt"></i> Risk Management</h2>
+                        <p>Monitor and manage portfolio risks</p>
+                    </div>
+                    
+                    <div class="risk-content">
+                        <div class="risk-dashboard" id="riskDashboard">
+                            <div class="risk-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Analyzing risks...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Intelligence Panel -->
+                <div class="ai-panel" id="marketPanel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-globe"></i> Market Intelligence</h2>
+                        <p>Real-time market insights and trends</p>
+                    </div>
+                    
+                    <div class="market-content">
+                        <div class="market-insights" id="marketInsights">
+                            <div class="market-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Gathering market intelligence...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goal Planning Panel -->
+                <div class="ai-panel" id="goalsPanel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-bullseye"></i> Financial Goal Planning</h2>
+                        <p>Plan and track your financial goals</p>
+                    </div>
+                    
+                    <div class="goals-content">
+                        <div class="goals-dashboard" id="goalsDashboard">
+                            <div class="goals-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Analyzing your financial goals...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monitoring Panel -->
+                <div class="ai-panel" id="monitoringPanel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-eye"></i> Autonomous Monitoring</h2>
+                        <p>24/7 portfolio monitoring and alerts</p>
+                    </div>
+                    
+                    <div class="monitoring-content">
+                        <div class="monitoring-dashboard" id="monitoringDashboard">
+                            <div class="monitoring-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Checking monitoring status...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/components/ai-assistant.js"></script>
+</body>
+</html> 
