@@ -32,7 +32,7 @@ def main():
             sys.exit(1)
     
     print("🚀 Starting Portfolio Management Web Portal...")
-    print("📊 Access your application at: http://localhost:5000")
+    print("📊 Access your application at: http://localhost:8000")
     print("⏹️  Press Ctrl+C to stop the server")
     print("=" * 50)
     print()
